@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	root := flag.String("root", "https://wykop.pl", "romek898")
+	root := flag.String("root", "https://google.com", "foo")
 	phrase := flag.String("phrase", "foo", "phrase to find")
 	rl := flag.Int("rl", 5, "rate limit")
 
@@ -24,7 +24,7 @@ func main() {
 			}
 		}
 	}(c)
-	_, err := c.Crawl(*root, *phrase)
+	err := c.Crawl(*root, *phrase)
 	if err != nil {
 		log.Error(err)
 		return
