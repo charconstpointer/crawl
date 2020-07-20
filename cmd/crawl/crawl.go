@@ -5,16 +5,17 @@ import (
 	"fmt"
 
 	"github.com/charconstpointer/crawl/pkg/crawler"
-	"github.com/labstack/gommon/log"
+	"go.uber.org/zap"
 )
 
 func main() {
 	root := flag.String("root", "https://google.com", "foo")
 	phrase := flag.String("phrase", "foo", "phrase to find")
 	rl := flag.Int("rl", 5, "rate limit")
+	logger, _ := zap.NewProduction()
 
 	flag.Parse()
-	log.Infof("Flags %s, %s, %d", *root, *phrase, *rl)
+	logger.Sugar().Infow("Flags %s, %s, %d", zap.String("root", *root), zap.String("phrase", *phrase), zap.Int("rl", *rl))
 	c := crawler.NewCrawler(*rl)
 	go func(c *crawler.Crawler) {
 		for {
@@ -26,7 +27,7 @@ func main() {
 	}(c)
 	err := c.Crawl(*root, *phrase)
 	if err != nil {
-		log.Error(err)
+		logger.Sugar().Error(err.Error())
 		return
 	}
 }
