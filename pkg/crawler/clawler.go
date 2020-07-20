@@ -11,6 +11,10 @@ import (
 	"go.uber.org/ratelimit"
 )
 
+type crawler interface {
+	Crawl(URL string, phrase string) error
+}
+
 type Crawler struct {
 	rl      ratelimit.Limiter
 	C       chan string
