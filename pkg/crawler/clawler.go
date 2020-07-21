@@ -52,7 +52,7 @@ func (c *Crawler) walk(URL string, phrase string, depth int) error {
 		log.Error(err)
 	}
 	c.addVisited(URL)
-	fmt.Println("visited", URL)
+
 	b, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
@@ -115,7 +115,6 @@ func (c *Crawler) addVisited(URL string) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	if !c.visited.Contains(URL) {
-		fmt.Println("adding visited", URL)
 		c.visited.Add(URL)
 	}
 }
