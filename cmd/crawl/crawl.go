@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"time"
 
 	"github.com/charconstpointer/crawl/pkg/crawler"
 	"github.com/labstack/gommon/log"
@@ -16,20 +17,19 @@ func main() {
 	flag.Parse()
 	log.Infof("flags %s, %s, %d\n", "root", *root, "phrase", *phrase, "rl", *rl)
 	c := crawler.NewCrawler(*rl, *limit)
-	err := c.Crawl(*root, *phrase)
-
-	if err != nil {
-		log.Error(err)
-		return
-	}
 
 	go func() {
 		for {
 			select {
 			case msg := <-c.C:
-				log.Infof(">%s\n", msg)
+				log.Infof(">%s", msg)
 			}
 		}
 	}()
-
+	err := c.Crawl(*root, *phrase)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	time.Sleep(1000 * time.Second)
 }

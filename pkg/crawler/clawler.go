@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/charconstpointer/crawl/pkg/set"
+	"github.com/labstack/gommon/log"
 	"go.uber.org/ratelimit"
 )
 
@@ -48,17 +49,17 @@ func (c *Crawler) walk(URL string, phrase string, depth int) error {
 
 	res, err := http.Get(URL)
 	if err != nil {
-		return err
+		log.Error(err)
 	}
 	c.addVisited(URL)
-
+	fmt.Println("visited", URL)
 	b, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
+
 	urls := c.findUrls(string(b))
 
-	fmt.Println(URL)
 	found := search(phrase, string(b), URL)
 
 	if found {
@@ -114,6 +115,7 @@ func (c *Crawler) addVisited(URL string) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 	if !c.visited.Contains(URL) {
+		fmt.Println("adding visited", URL)
 		c.visited.Add(URL)
 	}
 }
