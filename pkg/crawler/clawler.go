@@ -60,7 +60,7 @@ func (c *Crawler) walk(URL string, phrase string, depth int) error {
 
 	urls := c.findUrls(string(b))
 
-	found := search(phrase, string(b), URL)
+	found := search(phrase, string(b))
 
 	if found {
 		c.C <- URL
@@ -106,7 +106,7 @@ func (c *Crawler) findUrls(source string) []string {
 	return notVisited
 }
 
-func search(phrase string, content string, URL string) bool {
+func search(phrase string, content string) bool {
 	found := strings.Contains(content, phrase)
 	return found
 }
