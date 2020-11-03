@@ -68,6 +68,7 @@ func (c *Crawler) walk(URL string, phrase string, depth int) error {
 	}
 
 	for _, u := range urls {
+		log.Printf("%s", u)
 		_ = c.rl.Take()
 		go func(u string, ch chan<- string) {
 			_ = c.walk(u, phrase, depth+1)
